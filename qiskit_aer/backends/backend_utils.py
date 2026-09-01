@@ -436,12 +436,19 @@ BASIS_GATES[None] = BASIS_GATES["automatic"] = sorted(
 
 def cpp_execute_circuits(controller, aer_circuits, noise_model, config):
     """Execute aer circuits on C++ controller wrapper"""
+    import json as _json
 
     # Location where we put external libraries that will be
     # loaded at runtime by the simulator extension
     config.library_dir = LIBRARY_DIR
 
-    noise_model = noise_model.to_dict(serializable=True) if noise_model else {}
+    # Serialize to a JSON string so the C++ binding receives a plain string
+    # rather than a Python dict.  The string path in the binding is robust
+    # across pybind11 versions because it bypasses the Python→nlohmann ADL
+    # conversion, which changed behaviour in pybind11 ≥ 3.
+    noise_model = (
+        _json.dumps(noise_model.to_dict(serializable=True)) if noise_model else "{}"
+    )
 
     return controller.execute(aer_circuits, noise_model, config)
 

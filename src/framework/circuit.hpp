@@ -269,8 +269,9 @@ public:
   }
 
   void measure(const reg_t &qubits, const reg_t &memory,
-               const reg_t &registers) {
-    ops.push_back(Operations::make_measure(qubits, memory, registers));
+               const reg_t &registers,
+               const std::string &name = "measure") {
+    ops.push_back(Operations::make_measure(qubits, memory, registers, name));
   }
 
   void reset(const reg_t &qubits, const int_t cond_regidx = -1) {
