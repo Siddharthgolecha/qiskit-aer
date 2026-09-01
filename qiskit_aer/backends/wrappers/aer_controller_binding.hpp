@@ -93,16 +93,10 @@ void bind_aer_controller(MODULE m) {
                           std::vector<std::shared_ptr<Circuit>> &circuits,
                           py::object noise_model, AER::Config &config) {
                  Noise::NoiseModel noise_model_native;
-                 if (noise_model) {
-                   // Accept either a JSON string (pre-serialized) or a Python
-                   // dict.  Passing a pre-serialized string avoids pybind11
-                   // version-dependent Python→json_t implicit conversion.
-                   if (py::isinstance<py::str>(noise_model)) {
-                     noise_model_native.load_from_json(
-                         json_t::parse(noise_model.cast<std::string>()));
-                   } else {
-                     noise_model_native.load_from_json(noise_model);
-                   }
+                 if (!noise_model.is_none()) {
+                   json_t noise_model_json;
+                   std::to_json(noise_model_json, noise_model);
+                   noise_model_native.load_from_json(noise_model_json);
                  }
 
                  return self.execute(circuits, noise_model_native, config);
