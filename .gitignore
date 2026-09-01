@@ -35,4 +35,5 @@ test/.asv
 docs/_build/
 docs/stubs/
 docs/api/
+.venv-qiskit252/
 
