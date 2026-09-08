@@ -442,11 +442,11 @@ def cpp_execute_circuits(controller, aer_circuits, noise_model, config):
     # loaded at runtime by the simulator extension
     config.library_dir = LIBRARY_DIR
 
-    # Serialize to a JSON string so the C++ binding receives a plain string
-    # rather than a Python dict.  The string path in the binding is robust
-    # across pybind11 versions because it bypasses the Python→nlohmann ADL
-    # conversion, which changed behaviour in pybind11 ≥ 3.
-    noise_model = _json.dumps(noise_model.to_dict(serializable=True)) if noise_model else "{}"
+    # Serialize the noise model to a JSON string so the C++ binding receives a
+    # plain str rather than a Python dict.  This bypasses the Python→nlohmann
+    # ADL conversion in std::to_json which changed behaviour in pybind11 ≥ 3.
+    # Pass None when there is no noise model so the C++ is_none() check works.
+    noise_model = _json.dumps(noise_model.to_dict(serializable=True)) if noise_model else None
 
     return controller.execute(aer_circuits, noise_model, config)
 
