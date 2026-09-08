@@ -1662,8 +1662,7 @@ Op input_to_op_barrier(const inputdata_t &input) {
 }
 
 template <typename inputdata_t>
-Op input_to_op_measure(const inputdata_t &input,
-                       const std::string &op_name) {
+Op input_to_op_measure(const inputdata_t &input, const std::string &op_name) {
   Op op;
   op.type = OpType::measure;
   op.name = op_name;

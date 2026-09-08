@@ -1073,7 +1073,8 @@ void NoiseModel::load_from_json(const json_t &js) {
       JSON::get_value(noise_qubits, "noise_qubits", gate_js);
 
       // We treat measure/measure_* as a separate error op so that it can be
-      // applied before the measure operation, rather than after like other gates
+      // applied before the measure operation, rather than after like other
+      // gates
       stringset_t measure_ops;
       for (auto it = ops.begin(); it != ops.end();) {
         if (*it == "measure" || it->compare(0, 8, "measure_") == 0) {

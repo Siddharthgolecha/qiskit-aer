@@ -446,9 +446,7 @@ def cpp_execute_circuits(controller, aer_circuits, noise_model, config):
     # rather than a Python dict.  The string path in the binding is robust
     # across pybind11 versions because it bypasses the Python→nlohmann ADL
     # conversion, which changed behaviour in pybind11 ≥ 3.
-    noise_model = (
-        _json.dumps(noise_model.to_dict(serializable=True)) if noise_model else "{}"
-    )
+    noise_model = _json.dumps(noise_model.to_dict(serializable=True)) if noise_model else "{}"
 
     return controller.execute(aer_circuits, noise_model, config)
 
